@@ -1,3 +1,8 @@
+/**
+ * @author Gani Aytan (FH Aachen - University of applied Sciences)
+ * @version 1.0
+ */
+
 const EPSILON = "eps";
 
 let variables = [];
@@ -43,7 +48,7 @@ document.getElementById('run_btn').addEventListener('click', () => {
 
     let fo_string = "";
     variables.forEach(variable => {
-        fo_string += `FO(${variable}) = \n`;
+        fo_string += `FO(${variable}) = ${calculateFollowSets(variable)}\n`;
     })
 
     let la_string = "";
@@ -52,9 +57,46 @@ document.getElementById('run_btn').addEventListener('click', () => {
     })
 
     let output = document.getElementById('output_area');
-    output.value = `${variables_string}\n${terminals_string}\n\n${replaceAll(fi_string,EPSILON,"")}\n${fo_string}\n${la_string}`;
+    output.value = `${variables_string}\n${terminals_string}\n\n${replaceAll(fi_string,EPSILON,"")}\n${replaceAll(fo_string,EPSILON, "")}\n${la_string}`;
 
 })
+
+function calculateFollowSets(variable) {
+    let lines = document.getElementById('input_area').value.split('\n');
+    let follows = "";
+
+    lines.forEach(line => {
+        const rule = line.split(' ');
+        for (let i = 2; i < rule.length; i++) {
+            if (i + 1 < rule.length && follows.includes(EPSILON) && terminals.includes(rule[i + 1])) {
+                follows += rule[i + 1] + " ";
+                follows = replaceAll(follows, EPSILON, "");
+            }
+            else if (i + 1 < rule.length && follows.includes(EPSILON) && variables.includes(rule[i + 1])) {
+                follows = replaceAll(follows, EPSILON, "");
+                follows += calculateFirstSets(rule[i + 1]);
+            }
+            else if (i + 1 >= rule.length && follows.includes(EPSILON) && rule[0] !== variable) {
+                follows = replaceAll(follows, EPSILON, "");
+                follows += calculateFollowSets(rule[0]);
+            }
+            if (rule[i] === variable) {
+                if (i + 1 < rule.length && terminals.includes(rule[i + 1])) {
+                    follows += rule[i + 1] + " ";
+                    break;
+                }
+                else if (i + 1 < rule.length && variables.includes(rule[i + 1])) {
+                    follows += calculateFirstSets(rule[i + 1]);
+                }
+                else if (i + 1 >= rule.length && rule[0] !== variable) {
+                    follows += calculateFollowSets(rule[0]);
+                }
+            }
+        }
+    })
+
+    return removeDuplicateWords(follows);
+}
 
 function calculateFirstSets(variable) {
     let lines = document.getElementById('input_area').value.split('\n');
@@ -85,8 +127,24 @@ function calculateFirstSets(variable) {
     return firsts;
 }
 
+function removeDuplicateWords(inputString) {
+    const words = inputString.split(/\s+/);
+
+    const uniqueWords = [];
+    const seenWords = new Set();
+
+    for (const word of words) {
+        if (word === '' || !seenWords.has(word)) {
+            uniqueWords.push(word);
+            seenWords.add(word);
+        }
+    }
+
+    return uniqueWords.join(' ');
+}
+
 function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function replaceAll(str, find, replace) {
