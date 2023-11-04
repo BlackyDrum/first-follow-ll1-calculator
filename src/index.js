@@ -152,6 +152,10 @@ function calculateLookaheadSets(index) {
             if (!lookaheads.includes(EPSILON)) {
                 break;
             }
+            if (i + 1 === rule.length && lookaheads.includes(EPSILON)) {
+                lookaheads += calculateFollowSets(rule[0]);
+            }
+            lookaheads = replaceAll(lookaheads, EPSILON + " ", "");
         }
     }
 
