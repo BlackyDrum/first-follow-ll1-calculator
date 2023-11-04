@@ -45,7 +45,7 @@ document.getElementById('run_btn').addEventListener('click', () => {
 
     let fi_string = "";
     variables.forEach(variable => {
-        fi_string += `FI(${variable}) = { ${removeLastOccurrence(calculateFirstSets(variable), ",")}}\n`;
+        fi_string += `FI(${variable}) = { ${removeDuplicateWords(removeLastOccurrence(calculateFirstSets(variable), ","))}}\n`;
     })
 
     let fo_string = "";
@@ -55,11 +55,11 @@ document.getElementById('run_btn').addEventListener('click', () => {
 
     let la_string = "";
     lines.forEach((line, index) => {
-        la_string += `LA(${index + 1}) = \n`;
+        la_string += `LA(${index + 1}) = { ${removeDuplicateWords(removeLastOccurrence(calculateLookaheadSets(index), ","))}}\n`;
     })
 
     let output = document.getElementById('output_area');
-    output.value = `${removeLastOccurrence(variables_string, ",")}\n${removeLastOccurrence(terminals_string, ",")}\n\n${replaceAll(fi_string,EPSILON,"")}\n${replaceAll(fo_string,EPSILON, "")}\n${la_string}`;
+    output.value = `${removeLastOccurrence(variables_string, ",")}\n${removeLastOccurrence(terminals_string, ",")}\n\n${replaceAll(fi_string,EPSILON + " ","")}\n${replaceAll(fo_string,EPSILON, "")}\n${replaceAll(la_string, EPSILON + " ", "")}`;
 
 })
 
@@ -110,6 +110,9 @@ function calculateFirstSets(variable) {
         if (rule[0] === variable) {
             for (let i = 2; i < rule.length; i++) {
                 if (i > 2 && terminate && !firsts.includes(EPSILON)) return firsts;
+                if (i > 2 && firsts.includes(EPSILON)) {
+                    firsts = replaceAll(firsts, EPSILON, "");
+                }
                 if (terminals.includes(rule[i])) {
                     firsts += rule[i] + ", ";
                     break;
@@ -119,7 +122,7 @@ function calculateFirstSets(variable) {
                     if (firsts !== "") terminate = true;
                 }
                 else if (rule[2] === EPSILON) {
-                    firsts += EPSILON;
+                    firsts += EPSILON + " ";
                     return firsts;
                 }
             }
@@ -127,6 +130,32 @@ function calculateFirstSets(variable) {
     })
 
     return firsts;
+}
+
+function calculateLookaheadSets(index) {
+    let lines = document.getElementById('input_area').value.split('\n')[index];
+    let lookaheads = "";
+
+    const rule = lines.split(' ');
+    for (let i = 2; i < rule.length; i++) {
+        if (rule[2] === EPSILON) {
+            lookaheads += calculateFollowSets(rule[0]);
+            break;
+        }
+
+        if (terminals.includes(rule[i])) {
+            lookaheads += rule[i] + ", ";
+            break;
+        }
+        else if (variables.includes(rule[i])) {
+            lookaheads += calculateFirstSets(rule[i]);
+            if (!lookaheads.includes(EPSILON)) {
+                break;
+            }
+        }
+    }
+
+    return removeDuplicateWords(lookaheads);
 }
 
 function removeDuplicateWords(inputString) {
