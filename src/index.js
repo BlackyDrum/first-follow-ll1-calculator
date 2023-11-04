@@ -162,3 +162,20 @@ document.getElementById('clear_btn').addEventListener('click', () => {
     document.getElementById('input_area').value = null;
     document.getElementById('output_area').value = null;
 })
+
+document.getElementById('example_btn').addEventListener('click', () => {
+    reset();
+
+    document.getElementById('input_area').value = `S -> a A B
+S -> C D E
+A -> B C D
+A -> x
+A -> eps
+B -> a b c
+C -> d x y
+D -> x z
+D -> eps
+E -> b y z
+E -> eps`;
+    document.getElementById('output_area').value = null;
+})
