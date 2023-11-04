@@ -4,11 +4,13 @@
 .flex-container--evenly {
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 textarea {
     resize: none;
 }
+
 
 button {
     cursor: pointer;
