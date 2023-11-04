@@ -23,19 +23,21 @@ document.getElementById('run_btn').addEventListener('click', () => {
         }
     })
 
-    let variables_string = "Variables: ";
+    let variables_string = "Variables: { ";
     variables.forEach(variable => {
         if (!variables_string.includes(variable) && variable !== EPSILON)
-            variables_string += `${variable} `;
+            variables_string += `${variable}, `;
     })
+    variables_string += "}";
 
-    let terminals_string = "Terminals: ";
+    let terminals_string = "Terminals: { ";
     symbols.forEach(symbol => {
         if (!variables.includes(symbol) && !terminals.includes(symbol) && symbol !== EPSILON) {
-            terminals_string += `${symbol} `;
+            terminals_string += `${symbol}, `;
             terminals.push(symbol);
         }
     })
+    terminals_string += "}";
 
     variables = [...new Set(variables)];
     terminals = [...new Set(terminals)];
@@ -43,12 +45,12 @@ document.getElementById('run_btn').addEventListener('click', () => {
 
     let fi_string = "";
     variables.forEach(variable => {
-        fi_string += `FI(${variable}) = ${calculateFirstSets(variable)}\n`;
+        fi_string += `FI(${variable}) = { ${removeLastOccurrence(calculateFirstSets(variable), ",")}}\n`;
     })
 
     let fo_string = "";
     variables.forEach(variable => {
-        fo_string += `FO(${variable}) = ${calculateFollowSets(variable)}\n`;
+        fo_string += `FO(${variable}) = { ${removeLastOccurrence(calculateFollowSets(variable), ",")}}\n`;
     })
 
     let la_string = "";
@@ -57,7 +59,7 @@ document.getElementById('run_btn').addEventListener('click', () => {
     })
 
     let output = document.getElementById('output_area');
-    output.value = `${variables_string}\n${terminals_string}\n\n${replaceAll(fi_string,EPSILON,"")}\n${replaceAll(fo_string,EPSILON, "")}\n${la_string}`;
+    output.value = `${removeLastOccurrence(variables_string, ",")}\n${removeLastOccurrence(terminals_string, ",")}\n\n${replaceAll(fi_string,EPSILON,"")}\n${replaceAll(fo_string,EPSILON, "")}\n${la_string}`;
 
 })
 
@@ -69,7 +71,7 @@ function calculateFollowSets(variable) {
         const rule = line.split(' ');
         for (let i = 2; i < rule.length; i++) {
             if (i + 1 < rule.length && follows.includes(EPSILON) && terminals.includes(rule[i + 1])) {
-                follows += rule[i + 1] + " ";
+                follows += rule[i + 1] + ", ";
                 follows = replaceAll(follows, EPSILON, "");
             }
             else if (i + 1 < rule.length && follows.includes(EPSILON) && variables.includes(rule[i + 1])) {
@@ -82,7 +84,7 @@ function calculateFollowSets(variable) {
             }
             if (rule[i] === variable) {
                 if (i + 1 < rule.length && terminals.includes(rule[i + 1])) {
-                    follows += rule[i + 1] + " ";
+                    follows += rule[i + 1] + ", ";
                     break;
                 }
                 else if (i + 1 < rule.length && variables.includes(rule[i + 1])) {
@@ -109,7 +111,7 @@ function calculateFirstSets(variable) {
             for (let i = 2; i < rule.length; i++) {
                 if (i > 2 && terminate && !firsts.includes(EPSILON)) return firsts;
                 if (terminals.includes(rule[i])) {
-                    firsts += rule[i] + " ";
+                    firsts += rule[i] + ", ";
                     break;
                 }
                 else if (variables.includes(rule[i])) {
@@ -141,6 +143,16 @@ function removeDuplicateWords(inputString) {
     }
 
     return uniqueWords.join(' ');
+}
+
+function removeLastOccurrence(inputString, needle) {
+    const lastIndex = inputString.lastIndexOf(needle);
+
+    if (lastIndex !== -1) {
+        return inputString.slice(0, lastIndex) + inputString.slice(lastIndex + needle.length);
+    } else {
+        return inputString;
+    }
 }
 
 function escapeRegExp(string) {
