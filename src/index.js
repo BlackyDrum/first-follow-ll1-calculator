@@ -136,7 +136,9 @@ function calculateFirstSets(variable) {
                     firsts = replaceAll(firsts, EPSILON, "");
                 }
                 if (terminals.includes(rule[i])) {
-                    firsts += rule[i] + ", ";
+                    if (!firsts.includes(rule[i])) {
+                        firsts += rule[i] + ", ";
+                    }
                     break;
                 }
                 else if (variables.includes(rule[i])) {
