@@ -15,10 +15,17 @@
 .footer {
     position: fixed;
     bottom: 0;
-    height: auto;
-    margin-bottom: 10px;
     width: 100%;
     text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+/* Media query for smaller devices (e.g., screens less than 768px wide) */
+@media (max-width: 960px) {
+    .footer {
+        position: relative;
+        padding: 10px 0; /* Optional padding */
+    }
 }
 
 textarea {

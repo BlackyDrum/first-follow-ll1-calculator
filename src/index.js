@@ -8,6 +8,7 @@ const EPSILON = "eps";
 let variables = [];
 let symbols = [];
 let terminals = [];
+let lookaheads = new Map();
 
 document.getElementById('run_btn').addEventListener('click', () => {
     reset()
@@ -200,6 +201,7 @@ function reset() {
     variables = [];
     symbols = [];
     terminals = [];
+    lookaheads = new Map();
 }
 
 document.getElementById('clear_btn').addEventListener('click', () => {
