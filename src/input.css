@@ -20,16 +20,11 @@
     margin-bottom: 0.5rem;
 }
 
-/* Media query for smaller devices (e.g., screens less than 768px wide) */
 @media (max-width: 960px) {
     .footer {
         position: relative;
-        padding: 10px 0; /* Optional padding */
+        padding: 10px 0;
     }
-}
-
-textarea {
-    resize: none;
 }
 
 li {
