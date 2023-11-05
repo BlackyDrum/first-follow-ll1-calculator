@@ -32,6 +32,9 @@ textarea {
     resize: none;
 }
 
+li {
+    margin-top: 5px;
+}
 
 button {
     cursor: pointer;
