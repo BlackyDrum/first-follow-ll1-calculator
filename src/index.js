@@ -8,7 +8,7 @@ const EPSILON = "eps";
 let variables = [];
 let symbols = [];
 let terminals = [];
-let lookaheads = new Map();
+let lookaheads = [];
 
 document.getElementById('run_btn').addEventListener('click', () => {
     reset()
@@ -56,13 +56,33 @@ document.getElementById('run_btn').addEventListener('click', () => {
 
     let la_string = "";
     lines.forEach((line, index) => {
-        la_string += `LA(${index + 1}) = { ${removeDuplicateWords(removeLastOccurrence(calculateLookaheadSets(index), ","))}}\n`;
+        let la = removeDuplicateWords(removeLastOccurrence(calculateLookaheadSets(index), ","));
+        la_string += `LA(${index + 1}) = { ${la}}\n`;
+        let variable = line.split(' ')[0];
+        lookaheads.push({variable: variable, terminals: la.trim().split(',')})
     })
 
+    let ll1_string = analyzeLL1();
+
     let output = document.getElementById('output_area');
-    output.value = `${removeLastOccurrence(variables_string, ",")}\n${removeLastOccurrence(terminals_string, ",")}\n\n${replaceAll(fi_string,EPSILON + " ","")}\n${replaceAll(fo_string,EPSILON, "")}\n${replaceAll(la_string, EPSILON + " ", "")}`;
+    output.value = `${removeLastOccurrence(variables_string, ",")}\n${removeLastOccurrence(terminals_string, ",")}\n\n${replaceAll(fi_string,EPSILON + " ","")}\n${replaceAll(fo_string,EPSILON, "")}\n${replaceAll(la_string, EPSILON + " ", "")}\n${ll1_string}`;
 
 })
+
+function analyzeLL1() {
+    for (let i = 0; i < lookaheads.length; i++) {
+        for (let j = 0; j < lookaheads.length; j++) {
+            if (i !== j && lookaheads[i].variable === lookaheads[j].variable) {
+                let intersect = lookaheads[i].terminals.filter(terminal => lookaheads[j].terminals.includes(terminal))
+                if (intersect.length !== 0) {
+                    return "Grammar is NOT LL(1)!"
+                }
+            }
+        }
+    }
+
+    return "Grammar is LL(1)!";
+}
 
 function calculateFollowSets(variable) {
     let lines = document.getElementById('input_area').value.split('\n');
@@ -201,7 +221,7 @@ function reset() {
     variables = [];
     symbols = [];
     terminals = [];
-    lookaheads = new Map();
+    lookaheads = [];
 }
 
 document.getElementById('clear_btn').addEventListener('click', () => {
