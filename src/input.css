@@ -7,6 +7,20 @@
     flex-wrap: wrap;
 }
 
+.description--bold {
+    font-weight: bold;
+    font-size: smaller;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    height: auto;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+
 textarea {
     resize: none;
 }

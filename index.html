@@ -11,6 +11,15 @@
 
 <hr>
 
+<h3>Usage</h3>
+<ul class="description--bold">
+    <li>Input your grammar in the provided field. Please note that <em>eps</em> is a reserved keyword representing epsilon. Each rule should be on a separate line, following the format: <em>V -> β</em>, where <em>V</em> is a variable and <em>β</em> is a sequence of variables and terminals including epsilon.</li>
+    <li>The tool will calculate <em>FI(V)</em> to represent the first set of variable <em>V</em> and <em>FO(V)</em> to represent the follow set. Additionally, it will calculate <em>LA(n)</em>, the lookahead set for a given rule <em>n</em>.</li>
+    <li>Additionally, it will analyze if the given grammar is LL(1) or not.</li>
+</ul>
+
+<br>
+
 <div class="flex-container--evenly">
     <div>
         <div>
@@ -37,6 +46,12 @@
         </div>
     </div>
 </div>
+
+<footer class="footer">
+    <hr>
+    <span>&#169; Gani Aytan (FH Aachen - University of Applied Sciences)</span>
+    <span><a href="https://github.com/BlackyDrum/first-follow-ll1-calculator">Github</a></span>
+</footer>
 
 <script src="src/index.js"></script>
 </body>
