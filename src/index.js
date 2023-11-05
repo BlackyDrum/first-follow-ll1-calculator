@@ -75,7 +75,9 @@ function analyzeLL1() {
             if (i !== j && lookaheads[i].variable === lookaheads[j].variable) {
                 let intersect = lookaheads[i].terminals.filter(terminal => lookaheads[j].terminals.includes(terminal))
                 if (intersect.length !== 0) {
-                    return "Grammar is NOT LL(1)!"
+                    let s = `LA(${i + 1}) ∩ LA(${j + 1}) ≠ ∅\n=> `
+                    console.log(i + 1, j + 1);
+                    return s + "Grammar is NOT LL(1)!"
                 }
             }
         }
