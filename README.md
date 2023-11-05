@@ -53,6 +53,8 @@ LA(8) = { x }
 LA(9) = { b, a }
 LA(10) = { b }
 LA(11) = { }
+
+Grammar is NOT LL(1)!
 ```
 
 The tool will calculate ``FI(V)`` to represent the first set of variable ``V`` and ``FO(V)`` to represent the follow set. Additionally, it will calculate ``LA(n)``, the lookeahead set for a given rule ``n``.
