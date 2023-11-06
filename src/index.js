@@ -10,6 +10,8 @@ let symbols = [];
 let terminals = [];
 let lookaheads = [];
 
+let follow_trace = [];
+
 document.getElementById('run_btn').addEventListener('click', () => {
     reset()
 
@@ -46,12 +48,15 @@ document.getElementById('run_btn').addEventListener('click', () => {
 
     let fi_string = "";
     variables.forEach(variable => {
-        fi_string += `FI(${variable}) = { ${removeDuplicateWords(removeLastOccurrence(calculateFirstSets(variable), ","))}}\n`;
+        fi_string += `FI(${variable}) = { ${removeDuplicateWords(removeLastOccurrence(calculateFirstSets(variable), ",")).trim()} }\n`;
+        follow_trace = [];
     })
 
     let fo_string = "";
     variables.forEach(variable => {
-        fo_string += `FO(${variable}) = { ${removeLastOccurrence(calculateFollowSets(variable), ",")}}\n`;
+        //debugger;
+        fo_string += `FO(${variable}) = { ${removeLastOccurrence(calculateFollowSets(variable), ",").trim()} }\n`;
+        follow_trace = [];
     })
 
     let la_string = "";
@@ -59,7 +64,8 @@ document.getElementById('run_btn').addEventListener('click', () => {
         let la = removeDuplicateWords(removeLastOccurrence(calculateLookaheadSets(index), ","));
         la_string += `LA(${index + 1}) = { ${la}}\n`;
         let variable = line.split(' ')[0];
-        lookaheads.push({variable: variable, terminals: la.trim().split(',')})
+        lookaheads.push({variable: variable, terminals: la.replace(/\s/g,'').split(',')})
+        follow_trace = [];
     })
 
     let ll1_string = analyzeLL1();
@@ -100,19 +106,20 @@ function calculateFollowSets(variable) {
                 follows = replaceAll(follows, EPSILON, "");
                 follows += calculateFirstSets(rule[i + 1]);
             }
-            else if (i + 1 >= rule.length && follows.includes(EPSILON) && rule[0] !== variable) {
+            else if (i + 1 >= rule.length && follows.includes(EPSILON)) {
                 follows = replaceAll(follows, EPSILON, "");
-                follows += calculateFollowSets(rule[0]);
+                if (rule[0] !== variable)
+                    follows += calculateFollowSets(rule[0]);
             }
             if (rule[i] === variable) {
                 if (i + 1 < rule.length && terminals.includes(rule[i + 1])) {
                     follows += rule[i + 1] + ", ";
-                    break;
                 }
                 else if (i + 1 < rule.length && variables.includes(rule[i + 1])) {
                     follows += calculateFirstSets(rule[i + 1]);
                 }
-                else if (i + 1 >= rule.length && rule[0] !== variable) {
+                else if (i + 1 >= rule.length && rule[0] !== variable && !follow_trace.includes(rule[0])) {
+                    follow_trace.push(rule[0]);
                     follows += calculateFollowSets(rule[0]);
                 }
             }
@@ -153,7 +160,7 @@ function calculateFirstSets(variable) {
         }
     })
 
-    return firsts;
+    return removeDuplicateWords(firsts);
 }
 
 function calculateLookaheadSets(index) {
