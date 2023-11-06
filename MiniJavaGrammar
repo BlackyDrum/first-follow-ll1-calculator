@@ -1,0 +1,33 @@
+<program> -> <constDecl> <varDecl> <statement>
+<constDecl> -> final int <constZuw> <constList> ;
+<constDecl> -> eps
+<constZuw> -> ident = number
+<constList> -> , <constZuw> <constList>
+<constList> -> eps
+<varDecl> -> int ident <varZuw> <varList> ;
+<varDecl> -> eps
+<varZuw> -> = number
+<varZuw> -> eps
+<varList> -> , ident <varZuw> <varList>
+<varList> -> eps
+<expression> -> <term> <summe>
+<summe> -> + <term> <summe>
+<summe> -> - <term> <summe>
+<summe> -> eps
+<term> -> <faktor> <product>
+<product> -> * <faktor> <product>
+<product> -> / <faktor> <product>
+<product> -> eps
+<faktor> -> number
+<faktor> -> ident
+<faktor> -> ( <expression> )
+<condition> -> <expression> compOP <expression>
+<statement> -> ident = <expression> ;
+<statement> -> print ( <expression> ) ;
+<statement> -> { <stmtList> }
+<statement> -> if <condition> <statement> <optElse>
+<statement> -> while <condition> <statement>
+<optElse> -> else <statement>
+<optElse> -> eps
+<stmtList> -> <statement> <stmtList>
+<stmtList> -> eps
