@@ -66,7 +66,7 @@ To calculate the first and follow sets, we follow a simple ruleset: <br>
 fi(α) with α ∈ (V ∪ Σ)*:
 - fi(ε) = {ε}
 - fi(a) = {a}                    with a ∈ Σ
-- fi(A) = ∪ (A -> β) fi(β)       with A ∈ V
+- fi(A) = ⋃ (A -> β) fi(β)       with A ∈ V
 
 - fi(αβ) = { fi(β), if ε ∉ fi(α) else fi(α) \{ε} ∪ fi(β), if ε ∈ fi(α) }
 
