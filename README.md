@@ -61,7 +61,7 @@ LA(3) ∩ LA(5) ≠ ∅
 The tool will calculate ``FI(V)`` to represent the first set of variable ``V`` and ``FO(V)`` to represent the follow set. Additionally, it will calculate ``LA(n)``, the lookeahead set for a given rule ``n``.
 
 ## How does it work
-To calculate the first and follow sets, we follow a simple ruleset based on Waite/Goose - Compiler Construction 1985: <br>
+To calculate the first and follow sets, we follow a simple ruleset based on <em>Waite/Goose - Compiler Construction 1985:</em> <br>
 ```
 fi(α) with α ∈ (V ∪ Σ)*:
 - fi(ε) = {ε}
