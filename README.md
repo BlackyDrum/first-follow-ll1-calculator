@@ -11,54 +11,49 @@ Input your grammar in the provided field. Please note that ``eps`` is a reserved
 ## Example
 To demonstrate the functionality of this tool, we'll use the following example grammar:
 ```
-S -> a A B
-S -> C D E
-A -> B C D
-A -> x
-A -> eps
-B -> a b c
-C -> d x y
-D -> x z
-D -> eps
-E -> b y z
-E -> eps
+E -> T E'
+E' -> + T E'
+E' -> eps
+T -> F T'
+T' -> * F T'
+T' -> eps
+F -> ( E )
+F -> id
 ```
 The output should look like this:
 ```
-Variables: { S, A, B, C, D, E }
-Terminals: { a, x, b, c, d, y, z }
+Variables: { E, E', T, T', F }
+Terminals: { +, *, (, ), id }
 
-FI(S) = { a, d }
-FI(A) = { a, x }
-FI(B) = { a }
-FI(C) = { d }
-FI(D) = { x }
-FI(E) = { b }
+FI(E) = { (, id }
+FI(E') = { + }
+FI(T) = { (, id }
+FI(T') = { * }
+FI(F) = { (, id }
 
-FO(S) = { }
-FO(A) = { a }
-FO(B) = { d }
-FO(C) = { x, b, a }
-FO(D) = { b, a }
-FO(E) = { }
+FO(E) = { ) }
+FO(E') = { ) }
+FO(T) = { +, ) }
+FO(T') = { +, ) }
+FO(F) = { *, +, ) }
 
-LA(1) = { a }
-LA(2) = { d }
-LA(3) = { a }
-LA(4) = { x }
-LA(5) = { a }
-LA(6) = { a }
-LA(7) = { d }
-LA(8) = { x }
-LA(9) = { b, a }
-LA(10) = { b }
-LA(11) = { }
+LA(1) = { (, id }
+LA(2) = { + }
+LA(3) = { ) }
+LA(4) = { (, id }
+LA(5) = { * }
+LA(6) = { +, ) }
+LA(7) = { ( }
+LA(8) = { id }
 
-LA(3) ∩ LA(5) ≠ ∅
-=> Grammar is NOT LL(1)!
+Grammar is LL(1)!
 ```
 
-The tool will calculate ``FI(V)`` to represent the first set of variable ``V`` and ``FO(V)`` to represent the follow set. Additionally, it will calculate ``LA(n)``, the lookeahead set for a given rule ``n``.
+The tool will calculate ``FI(V)`` to represent the first set of variable ``V`` and ``FO(V)`` to represent the follow set. Additionally, it will calculate ``LA(n)``, the lookeahead set for a given rule ``n`` and check if the grammar is LL(1).<br>
+
+If the grammar is LL(1), an analysis table will be created, that looks like this for our grammar:
+<table id="analysis-table"><tr><td></td><td class="text--bold">+</td><td class="text--bold">*</td><td class="text--bold">(</td><td class="text--bold">)</td><td class="text--bold">id</td><td class="text--bold">eps</td></tr><tr><td class="text--bold">E</td><td class="E+#+**_::_**+#++" style="color: red;">ERROR</td><td class="E+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="E+#+**_::_**+#+( text--bold">T E' , 1</td><td class="E+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="E+#+**_::_**+#+id text--bold">T E' , 1</td><td class="E+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">E'</td><td class="E'+#+**_::_**+#++ text--bold">+ T E' , 2</td><td class="E'+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="E'+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="E'+#+**_::_**+#+) text--bold">eps , 3</td><td class="E'+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="E'+#+**_::_**+#+eps text--bold">eps, 3</td></tr><tr><td class="text--bold">T</td><td class="T+#+**_::_**+#++" style="color: red;">ERROR</td><td class="T+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="T+#+**_::_**+#+( text--bold">F T' , 4</td><td class="T+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="T+#+**_::_**+#+id text--bold">F T' , 4</td><td class="T+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">T'</td><td class="T'+#+**_::_**+#++ text--bold">eps , 6</td><td class="T'+#+**_::_**+#+* text--bold">* F T' , 5</td><td class="T'+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="T'+#+**_::_**+#+) text--bold">eps , 6</td><td class="T'+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="T'+#+**_::_**+#+eps text--bold">eps, 6</td></tr><tr><td class="text--bold">F</td><td class="F+#+**_::_**+#++" style="color: red;">ERROR</td><td class="F+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="F+#+**_::_**+#+( text--bold">( E ) , 7</td><td class="F+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="F+#+**_::_**+#+id text--bold">id , 8</td><td class="F+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">+</td><td class="++#+**_::_**+#++ text-bold" style="color: rgb(2, 213, 35);">POP</td><td class="++#+**_::_**+#+*" style="color: red;">ERROR</td><td class="++#+**_::_**+#+(" style="color: red;">ERROR</td><td class="++#+**_::_**+#+)" style="color: red;">ERROR</td><td class="++#+**_::_**+#+id" style="color: red;">ERROR</td><td class="++#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">*</td><td class="*+#+**_::_**+#++" style="color: red;">ERROR</td><td class="*+#+**_::_**+#+* text-bold" style="color: rgb(2, 213, 35);">POP</td><td class="*+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="*+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="*+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="*+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">(</td><td class="(+#+**_::_**+#++" style="color: red;">ERROR</td><td class="(+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="(+#+**_::_**+#+( text-bold" style="color: rgb(2, 213, 35);">POP</td><td class="(+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="(+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="(+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">)</td><td class=")+#+**_::_**+#++" style="color: red;">ERROR</td><td class=")+#+**_::_**+#+*" style="color: red;">ERROR</td><td class=")+#+**_::_**+#+(" style="color: red;">ERROR</td><td class=")+#+**_::_**+#+) text-bold" style="color: rgb(2, 213, 35);">POP</td><td class=")+#+**_::_**+#+id" style="color: red;">ERROR</td><td class=")+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">id</td><td class="id+#+**_::_**+#++" style="color: red;">ERROR</td><td class="id+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="id+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="id+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="id+#+**_::_**+#+id text-bold" style="color: rgb(2, 213, 35);">POP</td><td class="id+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">eps</td><td class="eps+#+**_::_**+#++" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+eps text-bold" style="color: rgb(2, 213, 35);">ACCEPT</td></tr></table>
+
 
 ## How does it work
 To calculate the first and follow sets, we follow a simple ruleset based on <em>Waite/Goose - Compiler Construction 1985:</em> <br>
@@ -85,4 +80,14 @@ fi(βfo(A)) ∩ fi(γfo(A)) = ∅
 
 The tool simplifies this by denoting the lookahead set of a rule with LA(n), where n is the rule number in the grammar:
 la(A) = fi(βfo(A)) ⊆ (Σ ∪ {ε})
+```
+
+The analysis table is a formalization of the top-down analysis automaton, as the function <em>act</em>.
+```
+act: (V ∪ Σ ∪ {ε}) x (Σ ∪ {ε}) -> {α | A -> α ∈ R} x {1, ..., p} ∪ {POP, ERROR, ACCEPT}
+
+- act(A, x) = (α, i), if rule i = A -> α and x ∈ la(A, α)
+- act(a, a) = POP
+- act(ε, ε) = ACCEPT
+- act(X, x) = ERROR, else
 ```
