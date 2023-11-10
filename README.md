@@ -52,7 +52,116 @@ Grammar is LL(1)!
 The tool will calculate ``FI(V)`` to represent the first set of variable ``V`` and ``FO(V)`` to represent the follow set. Additionally, it will calculate ``LA(n)``, the lookeahead set for a given rule ``n`` and check if the grammar is LL(1).<br>
 
 If the grammar is LL(1), an analysis table will be created, that looks like this for our grammar:
-<table id="analysis-table"><tr><td></td><td class="text--bold">+</td><td class="text--bold">*</td><td class="text--bold">(</td><td class="text--bold">)</td><td class="text--bold">id</td><td class="text--bold">eps</td></tr><tr><td class="text--bold">E</td><td class="E+#+**_::_**+#++" style="color: red;">ERROR</td><td class="E+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="E+#+**_::_**+#+( text--bold">T E' , 1</td><td class="E+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="E+#+**_::_**+#+id text--bold">T E' , 1</td><td class="E+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">E'</td><td class="E'+#+**_::_**+#++ text--bold">+ T E' , 2</td><td class="E'+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="E'+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="E'+#+**_::_**+#+) text--bold">eps , 3</td><td class="E'+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="E'+#+**_::_**+#+eps text--bold">eps, 3</td></tr><tr><td class="text--bold">T</td><td class="T+#+**_::_**+#++" style="color: red;">ERROR</td><td class="T+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="T+#+**_::_**+#+( text--bold">F T' , 4</td><td class="T+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="T+#+**_::_**+#+id text--bold">F T' , 4</td><td class="T+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">T'</td><td class="T'+#+**_::_**+#++ text--bold">eps , 6</td><td class="T'+#+**_::_**+#+* text--bold">* F T' , 5</td><td class="T'+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="T'+#+**_::_**+#+) text--bold">eps , 6</td><td class="T'+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="T'+#+**_::_**+#+eps text--bold">eps, 6</td></tr><tr><td class="text--bold">F</td><td class="F+#+**_::_**+#++" style="color: red;">ERROR</td><td class="F+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="F+#+**_::_**+#+( text--bold">( E ) , 7</td><td class="F+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="F+#+**_::_**+#+id text--bold">id , 8</td><td class="F+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">+</td><td class="++#+**_::_**+#++ text-bold" style="color: rgb(2, 213, 35);">POP</td><td class="++#+**_::_**+#+*" style="color: red;">ERROR</td><td class="++#+**_::_**+#+(" style="color: red;">ERROR</td><td class="++#+**_::_**+#+)" style="color: red;">ERROR</td><td class="++#+**_::_**+#+id" style="color: red;">ERROR</td><td class="++#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">*</td><td class="*+#+**_::_**+#++" style="color: red;">ERROR</td><td class="*+#+**_::_**+#+* text-bold" style="color: rgb(2, 213, 35);">POP</td><td class="*+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="*+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="*+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="*+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">(</td><td class="(+#+**_::_**+#++" style="color: red;">ERROR</td><td class="(+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="(+#+**_::_**+#+( text-bold" style="color: rgb(2, 213, 35);">POP</td><td class="(+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="(+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="(+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">)</td><td class=")+#+**_::_**+#++" style="color: red;">ERROR</td><td class=")+#+**_::_**+#+*" style="color: red;">ERROR</td><td class=")+#+**_::_**+#+(" style="color: red;">ERROR</td><td class=")+#+**_::_**+#+) text-bold" style="color: rgb(2, 213, 35);">POP</td><td class=")+#+**_::_**+#+id" style="color: red;">ERROR</td><td class=")+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">id</td><td class="id+#+**_::_**+#++" style="color: red;">ERROR</td><td class="id+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="id+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="id+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="id+#+**_::_**+#+id text-bold" style="color: rgb(2, 213, 35);">POP</td><td class="id+#+**_::_**+#+eps" style="color: red;">ERROR</td></tr><tr><td class="text--bold">eps</td><td class="eps+#+**_::_**+#++" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+*" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+(" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+)" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+id" style="color: red;">ERROR</td><td class="eps+#+**_::_**+#+eps text-bold" style="color: rgb(2, 213, 35);">ACCEPT</td></tr></table>
+<table>
+  <tr>
+    <td></td>
+    <td>+</td>
+    <td>*</td>
+    <td>(</td>
+    <td>)</td>
+    <td>id</td>
+    <td>eps</td>
+  </tr>
+  <tr>
+    <td>E</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>T E' , 1</td>
+    <td>ERROR</td>
+    <td>T E' , 1</td>
+    <td>ERROR</td>
+  </tr>
+  <tr>
+    <td>E'</td>
+    <td>+ T E' , 2</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>eps , 3</td>
+    <td>ERROR</td>
+    <td>eps, 3</td>
+  </tr>
+  <tr>
+    <td>T</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>F T' , 4</td>
+    <td>ERROR</td>
+    <td>F T' , 4</td>
+    <td>ERROR</td>
+  </tr>
+  <tr>
+    <td>T'</td>
+    <td>eps , 6</td>
+    <td>* F T' , 5</td>
+    <td>ERROR</td>
+    <td>eps , 6</td>
+    <td>ERROR</td>
+    <td>eps, 6</td>
+  </tr>
+  <tr>
+    <td>F</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>( E ) , 7</td>
+    <td>ERROR</td>
+    <td>id , 8</td>
+    <td>ERROR</td>
+  </tr>
+  <tr>
+    <td>+</td>
+    <td>POP</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+  </tr>
+  <tr>
+    <td>*</td>
+    <td>ERROR</td>
+    <td>POP</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+  </tr>
+  <tr>
+    <td>(</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>POP</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+  </tr>
+  <tr>
+    <td>)</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>POP</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>POP</td>
+    <td>ERROR</td>
+  </tr>
+  <tr>
+    <td>eps</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ERROR</td>
+    <td>ACCEPT</td>
+  </tr>
+</table>
 
 
 ## How does it work
