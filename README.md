@@ -79,7 +79,7 @@ A -> β and A -> γ with β ≠ γ:
 fi(βfo(A)) ∩ fi(γfo(A)) = ∅
 
 The tool simplifies this by denoting the lookahead set of a rule with LA(n), where n is the rule number in the grammar:
-la(A) = fi(βfo(A)) ⊆ (Σ ∪ {ε})
+la(A, β) = fi(βfo(A)) ⊆ (Σ ∪ {ε}) = la(n)
 ```
 
 The analysis table is a formalization of the top-down analysis automaton, as the function <em>act</em>.
