@@ -22,6 +22,12 @@
 
 <br>
 
+<div class="flex-container--margin">
+    <button id="run_btn">Run</button>
+    <button id="clear_btn">Clear</button>
+    <button id="example_btn">Example</button>
+</div>
+
 <div class="flex-container--evenly">
     <div>
         <div>
@@ -29,14 +35,8 @@
                 <b>Input</b>
             </div>
             <div>
-                <textarea id="input_area" cols="50" rows="30"></textarea>
+                <textarea id="input_area" cols="50" rows="36"></textarea>
             </div>
-        </div>
-
-        <div class="flex-container">
-            <button id="run_btn">Run</button>
-            <button id="clear_btn">Clear</button>
-            <button id="example_btn">Example</button>
         </div>
     </div>
     <div>
@@ -44,7 +44,23 @@
             <b>Output</b>
         </div>
         <div>
-            <textarea id="output_area" cols="50" rows="30" disabled></textarea>
+            <textarea id="output_area" cols="50" rows="36" disabled></textarea>
+        </div>
+    </div>
+</div>
+
+
+<div style="width: 100%">
+    <div style="text-align: center">
+        <b>Analysis Table</b>
+        <div style="margin-top: 5px" id="info">
+            Will be created here...
+        </div>
+    </div>
+    <div style="display: flex">
+        <div style="margin-left: auto; margin-right: auto">
+            <table id="analysis-table">
+            </table>
         </div>
     </div>
 </div>

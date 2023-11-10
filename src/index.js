@@ -4,6 +4,7 @@
  */
 
 const EPSILON = "eps";
+const SEPERATOR = "+#+**_::_**+#+";
 
 let variables = [];
 let symbols = [];
@@ -75,6 +76,12 @@ document.getElementById('run_btn').addEventListener('click', () => {
 
     let output = document.getElementById('output_area');
     output.value = `${removeLastOccurrence(variables_string, ",")}\n${removeLastOccurrence(terminals_string, ",")}\n\n${replaceAll(fi_string,EPSILON + " ","")}\n${replaceAll(fo_string,EPSILON, "")}\n${replaceAll(la_string, EPSILON + " ", "")}\n${ll1_string}`;
+
+    if (!ll1_string.includes('NOT'))
+        createAnalysisTable(la_string);
+    else {
+        document.getElementById('info').innerText = "Cannot create analysis table, grammar is not LL(1)!";
+    }
 
 })
 
@@ -223,6 +230,104 @@ function calculateLookaheadSets(index) {
     return removeDuplicateWords(lookaheads);
 }
 
+function createAnalysisTable(la_string) {
+    // Create Table
+    let table = document.getElementById('analysis-table');
+    document.getElementById('info').style.visibility = "hidden";
+
+    let tr_header = document.createElement('tr');
+    tr_header.appendChild(document.createElement('td'));
+    for (const terminal of [...terminals, EPSILON]) {
+        let td_terminal = document.createElement('td');
+        td_terminal.classList.add('text--bold');
+        td_terminal.innerText = terminal;
+        tr_header.appendChild(td_terminal);
+    }
+    table.appendChild(tr_header)
+
+    let terminals_u_epsilon = [...terminals, EPSILON];
+    for (const symbol of [...variables, ...terminals, EPSILON]) {
+        let tr = document.createElement('tr');
+        let td = document.createElement('td');
+        td.innerText = symbol;
+        td.classList.add('text--bold');
+        tr.appendChild(td)
+
+        terminals_u_epsilon.forEach((terminal) => {
+            let td = document.createElement('td');
+            td.classList.add(`${symbol}${SEPERATOR}${terminal}`)
+            tr.appendChild(td);
+        })
+
+        table.appendChild(tr);
+    }
+
+    terminals_u_epsilon.forEach(terminal => {
+        let cell = document.getElementsByClassName(`${terminal}${SEPERATOR}${terminal}`)[0];
+        if (cell.classList.contains(`${EPSILON}${SEPERATOR}${EPSILON}`))
+            cell.innerHTML = "ACCEPT";
+        else
+            cell.innerHTML = 'POP'
+
+        cell.style.color = "#02D523";
+        cell.classList.add("text-bold")
+    })
+
+    let la_sets = parseLAStringToMap(la_string);
+    let lines = document.getElementById('input_area').value.split('\n');
+
+    lines.forEach((line, index) => {
+        let rule = line.split(' ');
+        for (const symbol of la_sets.get(index + 1)) {
+            if (!symbol.trim()) break;
+            let tmp = document.getElementsByClassName(`${rule[0]}${SEPERATOR}${symbol}`)[0];
+            for (let i = 2; i < rule.length; i++) {
+                tmp.innerHTML += rule[i] + " ";
+
+                if (rule[i] === EPSILON) {
+                    let varToEps = document.getElementsByClassName(`${rule[0]}${SEPERATOR}${EPSILON}`)[0];
+                    varToEps.innerHTML = `${EPSILON}, ${index + 1}`;
+                    varToEps.classList.add("text--bold");
+                }
+            }
+            tmp.innerHTML += `, ${index + 1}`;
+            tmp.classList.add("text--bold")
+        }
+
+    })
+
+    for (const terminal of [...terminals, EPSILON]) {
+        for (const symbol of [...variables, ...terminals, EPSILON]) {
+            let cell = document.getElementsByClassName(`${symbol}${SEPERATOR}${terminal}`)[0];
+            if (!cell.innerHTML.trim()) {
+                cell.innerHTML = "ERROR";
+                cell.style.color = "red"
+            }
+        }
+    }
+}
+
+function parseLAStringToMap(inputString) {
+    const lines = inputString.split('\n');
+
+    const resultMap = new Map();
+
+    const regex = /LA\((\d+)\) = {([^}]*)}/;
+
+    lines.forEach(line => {
+        const match = line.match(regex);
+
+        if (match) {
+            const number = parseInt(match[1], 10);
+            const characters = match[2].split(',').map(c => c.trim());
+
+            resultMap.set(number, characters);
+        }
+    });
+
+    return resultMap;
+}
+
 function removeDuplicateWords(inputString) {
     const words = inputString.split(/\s+/);
 
@@ -262,6 +367,9 @@ function reset() {
     symbols = [];
     terminals = [];
     lookaheads = [];
+
+    document.getElementById('analysis-table').innerText = '';
+    document.getElementById('info').style.visibility = "visible";
 }
 
 document.getElementById('clear_btn').addEventListener('click', () => {
@@ -273,16 +381,13 @@ document.getElementById('clear_btn').addEventListener('click', () => {
 document.getElementById('example_btn').addEventListener('click', () => {
     reset();
 
-    document.getElementById('input_area').value = `S -> a A B
-S -> C D E
-A -> B C D
-A -> x
-A -> eps
-B -> a b c
-C -> d x y
-D -> x z
-D -> eps
-E -> b y z
-E -> eps`;
+    document.getElementById('input_area').value = `E -> T E'
+E' -> + T E'
+E' -> eps
+T -> F T'
+T' -> * F T'
+T' -> eps
+F -> ( E )
+F -> id`;
     document.getElementById('output_area').value = null;
 })
