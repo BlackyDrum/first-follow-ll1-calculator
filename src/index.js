@@ -309,6 +309,9 @@ function createAnalysisTable(la_string) {
                 cell.textContent = "ERROR";
                 cell.style.color = "red"
             }
+            if ((cell.textContent.match(/\n/g) || []).length >= 2) {
+                cell.style.backgroundColor = "red";
+            }
         }
     }
 }
