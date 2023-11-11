@@ -27,21 +27,21 @@ document.getElementById('run_btn').addEventListener('click', () => {
         }
     })
 
-    let variables_string = "Variables: { ";
+    let variables_string = "Variables: ";
     variables.forEach(variable => {
         if (!variables_string.includes(variable) && variable !== EPSILON)
-            variables_string += `${variable}, `;
+            variables_string += `${variable} `;
     })
-    variables_string += "}";
+    variables_string += "";
 
-    let terminals_string = "Terminals: { ";
+    let terminals_string = "Terminals: ";
     symbols.forEach(symbol => {
         if (!variables.includes(symbol) && !terminals.includes(symbol) && symbol !== EPSILON) {
-            terminals_string += `${symbol}, `;
+            terminals_string += `${symbol} `;
             terminals.push(symbol);
         }
     })
-    terminals_string += "}";
+    terminals_string += "";
 
     variables = [...new Set(variables)];
     terminals = [...new Set(terminals)];
@@ -50,24 +50,24 @@ document.getElementById('run_btn').addEventListener('click', () => {
     // Calculate first sets
     let fi_string = "";
     variables.forEach(variable => {
-        fi_string += `FI(${variable}) = { ${removeDuplicateWords(removeLastOccurrence(calculateFirstSets(variable), ",")).trim()} }\n`;
+        fi_string += `FI(${variable}) = ${removeDuplicateWords(calculateFirstSets(variable)).trim()}\n`;
         follow_trace = [];
     })
 
     // Calculate follow sets
     let fo_string = "";
     variables.forEach(variable => {
-        fo_string += `FO(${variable}) = { ${removeLastOccurrence(calculateFollowSets(variable), ",").trim()} }\n`;
+        fo_string += `FO(${variable}) = ${removeLastOccurrence(calculateFollowSets(variable)).trim()}\n`;
         follow_trace = [];
     })
 
     // Calculate lookahead sets
     let la_string = "";
     lines.forEach((line, index) => {
-        let la = removeDuplicateWords(removeLastOccurrence(calculateLookaheadSets(index), ","));
-        la_string += `LA(${index + 1}) = { ${la}}\n`;
+        let la = removeDuplicateWords(calculateLookaheadSets(index)).trim();
+        la_string += `LA(${index + 1}) = ${la}\n`;
         let variable = line.split(' ')[0];
-        lookaheads.push({variable: variable, terminals: la.replace(/\s/g,'').split(',')})
+        lookaheads.push({variable: variable, terminals: la.split(' ')})
         follow_trace = [];
     })
 
@@ -75,17 +75,20 @@ document.getElementById('run_btn').addEventListener('click', () => {
     let ll1_string = analyzeLL1();
 
     let output = document.getElementById('output_area');
-    output.value = `${removeLastOccurrence(variables_string, ",")}\n${removeLastOccurrence(terminals_string, ",")}\n\n${replaceAll(fi_string,EPSILON + " ","")}\n${replaceAll(fo_string,EPSILON, "")}\n${replaceAll(la_string, EPSILON + " ", "")}\n${ll1_string}`;
+    output.value = `${variables_string}\n${terminals_string}\n\n${replaceAll(fi_string,EPSILON + " ","")}\n${replaceAll(fo_string,EPSILON, "")}\n${replaceAll(la_string, EPSILON + " ", "")}\n${ll1_string}`;
 
     if (!ll1_string.includes('NOT'))
         createAnalysisTable(la_string);
     else {
-        document.getElementById('info').innerText = "Cannot create analysis table, grammar is not LL(1)!";
+        document.getElementById('info').textContent = "Cannot create analysis table, grammar is not LL(1)!";
     }
 
 })
 
 function analyzeLL1() {
+    lookaheads.forEach(la => {
+        la.terminals = la.terminals.filter(terminal => terminal.trim() !== '');
+    })
     // Intersect every rule with the same variable.
     // If the result set contains no elements, continue, otherwise terminate with error message
     for (let i = 0; i < lookaheads.length; i++) {
@@ -113,7 +116,7 @@ function calculateFollowSets(variable) {
             // If there is a terminal one position right from the variable and the current follow set includes epsilon,
             // include that terminal in the follow set and delete epsilon
             if (i + 1 < rule.length && follows.includes(EPSILON) && terminals.includes(rule[i + 1])) {
-                follows += rule[i + 1] + ", ";
+                follows += rule[i + 1] + " ";
                 follows = replaceAll(follows, EPSILON, "");
             }
             // If there is a variable one position right from the current variable and the current follow set includes epsilon,
@@ -134,7 +137,7 @@ function calculateFollowSets(variable) {
             if (rule[i] === variable) {
                 // If there is a terminal one position right from the variable, include that terminal in the follow set
                 if (i + 1 < rule.length && terminals.includes(rule[i + 1])) {
-                    follows += rule[i + 1] + ", ";
+                    follows += rule[i + 1] + " ";
                 }
                 // If there is a variable one position right from the current variable, calculate the first set of the variable
                 // and include that first set in the follow set for the current variable
@@ -172,7 +175,7 @@ function calculateFirstSets(variable) {
                 // If we reach a terminal, include that in the first set and terminate
                 if (terminals.includes(rule[i])) {
                     if (!firsts.includes(rule[i])) {
-                        firsts += rule[i] + ", ";
+                        firsts += rule[i] + " ";
                     }
                     break;
                 }
@@ -210,7 +213,7 @@ function calculateLookaheadSets(index) {
         // If we reach a terminal, include that in the lookahead set for the current rule
         // and terminate
         if (terminals.includes(rule[i])) {
-            lookaheads += rule[i] + ", ";
+            lookaheads += rule[i] + " ";
             break;
         }
         // If we reach a variable, calculate the first set of the variable.
@@ -240,7 +243,7 @@ function createAnalysisTable(la_string) {
     for (const terminal of [...terminals, EPSILON]) {
         let td_terminal = document.createElement('td');
         td_terminal.classList.add('text--bold');
-        td_terminal.innerText = terminal;
+        td_terminal.textContent = terminal;
         tr_header.appendChild(td_terminal);
     }
     table.appendChild(tr_header)
@@ -249,7 +252,7 @@ function createAnalysisTable(la_string) {
     for (const symbol of [...variables, ...terminals, EPSILON]) {
         let tr = document.createElement('tr');
         let td = document.createElement('td');
-        td.innerText = symbol;
+        td.textContent = symbol;
         td.classList.add('text--bold');
         tr.appendChild(td)
 
@@ -265,32 +268,35 @@ function createAnalysisTable(la_string) {
     terminals_u_epsilon.forEach(terminal => {
         let cell = document.getElementsByClassName(`${terminal}${SEPERATOR}${terminal}`)[0];
         if (cell.classList.contains(`${EPSILON}${SEPERATOR}${EPSILON}`))
-            cell.innerHTML = "ACCEPT";
+            cell.textContent = "ACCEPT";
         else
-            cell.innerHTML = 'POP'
+            cell.textContent = 'POP'
 
         cell.style.color = "#02D523";
         cell.classList.add("text-bold")
     })
 
-    let la_sets = parseLAStringToMap(la_string);
-    let lines = document.getElementById('input_area').value.split('\n');
+    let la_sets = parseLAStringToMap(la_string)
+    la_sets.forEach((value, key) => {
+        la_sets.set(key, value.filter(symbol => symbol.trim() !== ''));
+    });
 
+    let lines = document.getElementById('input_area').value.split('\n');
     lines.forEach((line, index) => {
         let rule = line.split(' ');
         for (const symbol of la_sets.get(index + 1)) {
             if (!symbol.trim()) break;
             let tmp = document.getElementsByClassName(`${rule[0]}${SEPERATOR}${symbol}`)[0];
             for (let i = 2; i < rule.length; i++) {
-                tmp.innerHTML += rule[i] + " ";
+                tmp.textContent += rule[i] + " ";
 
                 if (rule[i] === EPSILON) {
                     let varToEps = document.getElementsByClassName(`${rule[0]}${SEPERATOR}${EPSILON}`)[0];
-                    varToEps.innerHTML = `${EPSILON}, ${index + 1}`;
+                    varToEps.textContent = `${EPSILON}, ${index + 1}`;
                     varToEps.classList.add("text--bold");
                 }
             }
-            tmp.innerHTML += `, ${index + 1}`;
+            tmp.textContent += `, ${index + 1}`;
             tmp.classList.add("text--bold")
         }
 
@@ -299,8 +305,8 @@ function createAnalysisTable(la_string) {
     for (const terminal of [...terminals, EPSILON]) {
         for (const symbol of [...variables, ...terminals, EPSILON]) {
             let cell = document.getElementsByClassName(`${symbol}${SEPERATOR}${terminal}`)[0];
-            if (!cell.innerHTML.trim()) {
-                cell.innerHTML = "ERROR";
+            if (!cell.textContent.trim()) {
+                cell.textContent = "ERROR";
                 cell.style.color = "red"
             }
         }
@@ -309,17 +315,16 @@ function createAnalysisTable(la_string) {
 
 function parseLAStringToMap(inputString) {
     const lines = inputString.split('\n');
-
     const resultMap = new Map();
 
-    const regex = /LA\((\d+)\) = {([^}]*)}/;
+    const regex = /LA\((\d+)\) = ([^*$]*)/;
 
     lines.forEach(line => {
         const match = line.match(regex);
 
         if (match) {
             const number = parseInt(match[1], 10);
-            const characters = match[2].split(',').map(c => c.trim());
+            const characters = match[2].split(' ').map(c => c.trim());
 
             resultMap.set(number, characters);
         }
@@ -368,7 +373,7 @@ function reset() {
     terminals = [];
     lookaheads = [];
 
-    document.getElementById('analysis-table').innerText = '';
+    document.getElementById('analysis-table').textContent = '';
     document.getElementById('info').style.visibility = "visible";
 }
 
