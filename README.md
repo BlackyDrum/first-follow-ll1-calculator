@@ -26,9 +26,9 @@ Variables: E E' T T' F
 Terminals: + * ( ) id 
 
 FI(E) = ( id
-FI(E') = + eps
+FI(E') = +
 FI(T) = ( id
-FI(T') = * eps
+FI(T') = *
 FI(F) = ( id
 
 FO(E) = )
@@ -188,7 +188,7 @@ A -> β and A -> γ with β ≠ γ:
 fi(βfo(A)) ∩ fi(γfo(A)) = ∅
 
 The tool simplifies this by denoting the lookahead set of a rule with LA(n), where n is the rule number in the grammar:
-la(A, β) = fi(βfo(A)) ⊆ (Σ ∪ {ε}) = la(n)
+la(A, β) = fi(βfo(A)) ⊆ (Σ ∪ {ε}) = la(n) | n = A -> β
 ```
 
 The analysis table is a formalization of the top-down analysis automaton, as the function <em>act</em>.
