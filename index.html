@@ -17,7 +17,7 @@
     <li>Each rule should be on a separate line, following the format: <em>V -> β</em>, where <em>V</em> is a variable and <em>β</em> is a sequence of variables and terminals including epsilon.</li>
     <li>The tool will calculate <em>FI(V)</em> to represent the first set of variable <em>V</em> and <em>FO(V)</em> to represent the follow set. Additionally, it will calculate <em>LA(n)</em>, the lookahead set for a given rule <em>n</em>.</li>
     <li>Also, it will analyze if the given grammar is LL(1) or not by intersecting the lookahead-sets with the same variable.</li>
-    <li>If the grammar is LL(1), an Analysis Table will be created.</li>
+    <li>An Analysis Table will be created. If the grammar is not LL(1), the regarding cells will be marked red.</li>
     <li>If you have a left-recursive production rule, the tool will not work.</li>
     <li>For more information click <a href="https://github.com/BlackyDrum/first-follow-ll1-calculator#how-does-it-work" target="_blank">here</a></li>
 </ul>
