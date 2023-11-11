@@ -32,7 +32,6 @@ document.getElementById('run_btn').addEventListener('click', () => {
         if (!variables_string.includes(variable) && variable !== EPSILON)
             variables_string += `${variable} `;
     })
-    variables_string += "";
 
     let terminals_string = "Terminals: ";
     symbols.forEach(symbol => {
@@ -41,7 +40,6 @@ document.getElementById('run_btn').addEventListener('click', () => {
             terminals.push(symbol);
         }
     })
-    terminals_string += "";
 
     variables = [...new Set(variables)];
     terminals = [...new Set(terminals)];
@@ -75,7 +73,7 @@ document.getElementById('run_btn').addEventListener('click', () => {
     let ll1_string = analyzeLL1();
 
     let output = document.getElementById('output_area');
-    output.value = `${variables_string}\n${terminals_string}\n\n${replaceAll(fi_string,EPSILON + " ","")}\n${replaceAll(fo_string,EPSILON, "")}\n${replaceAll(la_string, EPSILON + " ", "")}\n${ll1_string}`;
+    output.value = `${variables_string}\n${terminals_string}\n\n${replaceAll(fi_string,EPSILON,"")}\n${replaceAll(fo_string,EPSILON, "")}\n${replaceAll(la_string, EPSILON, "")}\n${ll1_string}`;
 
     if (!ll1_string.includes('NOT'))
         createAnalysisTable(la_string);
