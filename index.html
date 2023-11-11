@@ -12,23 +12,28 @@
 <hr>
 
 <h3>Usage</h3>
-<ul class="description--bold">
-    <li>Input your grammar in the provided field. Please note that <em>eps</em> is a reserved keyword representing epsilon.</li>
-    <li>Each rule should be on a separate line, following the format: <em>V -> β</em>, where <em>V</em> is a variable and <em>β</em> is a sequence of variables and terminals including epsilon.</li>
-    <li>The tool will calculate <em>FI(V)</em> to represent the first set of variable <em>V</em> and <em>FO(V)</em> to represent the follow set. Additionally, it will calculate <em>LA(n)</em>, the lookahead set for a given rule <em>n</em>.</li>
-    <li>Also, it will analyze if the given grammar is LL(1) or not by intersecting the lookahead-sets with the same variable.</li>
-    <li>An Analysis Table will be created. If the grammar is not LL(1), the regarding cells will be marked red.</li>
-    <li>If you have a left-recursive production rule, the tool will not work.</li>
+<ul>
+    <li>Input your grammar in the provided field. Please note that <strong>eps</strong> is a reserved keyword representing epsilon.</li>
+    <li>Each rule should be on a separate line, following the format: <strong>V -> β</strong>, where <strong>V</strong> is a variable and <strong>β</strong> is a sequence of variables and terminals including <strong>epsilon</strong>.</li>
+    <li>The tool will calculate <strong>FI(V)</strong> to represent the first set of variable <strong>V</strong> and <strong>FO(V)</strong> to represent the follow set. Additionally, it will calculate <strong>LA(n)</strong>, the lookahead set for a given rule <strong>n</strong>.</li>
+    <li>Also, it will analyze if the given grammar is <strong>LL(1)</strong> or not by intersecting the lookahead-sets with the same variable.</li>
+    <li>An Analysis Table will be created. If the grammar is not <strong>LL(1)</strong>, the regarding cells will be marked red.</li>
+    <li>If you have a <strong>left-recursive</strong> production rule, the tool will not work.</li>
     <li>For more information click <a href="https://github.com/BlackyDrum/first-follow-ll1-calculator#how-does-it-work" target="_blank">here</a></li>
 </ul>
 
-<br>
-
-<div class="flex-container--margin">
-    <button id="run_btn">Run</button>
-    <button id="clear_btn">Clear</button>
-    <button id="example_btn">Example</button>
+<div style="display: flex">
+    <div>
+        <label class="switch">
+            <input type="checkbox" id="switch">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div style="margin-top: auto; margin-bottom: auto; margin-left: 0.5rem">
+        <strong>Enable for more information in analysis table</strong>
+    </div>
 </div>
+
 
 <div class="flex-container--evenly">
     <div>
@@ -38,6 +43,11 @@
             </div>
             <div>
                 <textarea id="input_area" cols="50" rows="36"></textarea>
+            </div>
+            <div class="flex-container--margin">
+                <button id="run_btn">Run</button>
+                <button id="clear_btn">Clear</button>
+                <button id="example_btn">Example</button>
             </div>
         </div>
     </div>
@@ -53,7 +63,7 @@
 
 
 <div style="width: 100%">
-    <div style="text-align: center">
+    <div style="text-align: center; margin-top: 2rem">
         <b>Analysis Table</b>
         <div style="margin-top: 5px" id="info">
             Will be created here...
@@ -68,7 +78,7 @@
 </div>
 
 <footer class="footer">
-    <span>&#169; Gani Aytan (FH Aachen - University of Applied Sciences) - </span>
+    <span>&#169; G.A (FH Aachen - University of Applied Sciences) - </span>
     <span><a href="https://github.com/BlackyDrum/first-follow-ll1-calculator" target="_blank">Github</a></span>
 </footer>
 

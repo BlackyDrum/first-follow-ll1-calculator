@@ -243,7 +243,8 @@ function createAnalysisTable(la_string) {
     table.appendChild(tr_header)
 
     let terminals_u_epsilon = [...terminals, EPSILON];
-    for (const symbol of [...variables, ...terminals, EPSILON]) {
+    let sw = document.getElementById('switch').checked;
+    for (const symbol of (sw ? [...variables, ...terminals, EPSILON] : [...variables])) {
         let tr = document.createElement('tr');
         let td = document.createElement('td');
         td.textContent = symbol;
@@ -259,16 +260,19 @@ function createAnalysisTable(la_string) {
         table.appendChild(tr);
     }
 
-    terminals_u_epsilon.forEach(terminal => {
-        let cell = document.getElementsByClassName(`${terminal}${SEPERATOR}${terminal}`)[0];
-        if (cell.classList.contains(`${EPSILON}${SEPERATOR}${EPSILON}`))
-            cell.textContent = "ACCEPT";
-        else
-            cell.textContent = 'POP'
+    if (sw) {
+        terminals_u_epsilon.forEach(terminal => {
+            let cell = document.getElementsByClassName(`${terminal}${SEPERATOR}${terminal}`)[0];
+            if (cell.classList.contains(`${EPSILON}${SEPERATOR}${EPSILON}`))
+                cell.textContent = "ACCEPT";
+            else
+                cell.textContent = 'POP'
 
-        cell.style.color = "#02D523";
-        cell.classList.add("text-bold")
-    })
+            cell.style.color = "#02D523";
+            cell.classList.add("text-bold")
+        })
+    }
+
 
     let la_sets = parseLAStringToMap(la_string)
     la_sets.forEach((value, key) => {
@@ -303,12 +307,16 @@ function createAnalysisTable(la_string) {
     })
 
     for (const terminal of [...terminals, EPSILON]) {
-        for (const symbol of [...variables, ...terminals, EPSILON]) {
+        for (const symbol of (sw ? [...variables, ...terminals, EPSILON ] : [...variables])) {
             let cell = document.getElementsByClassName(`${symbol}${SEPERATOR}${terminal}`)[0];
-            if (!cell.textContent.trim()) {
-                cell.textContent = "ERROR";
-                cell.style.color = "red"
+
+            if (sw) {
+                if (!cell.textContent.trim()) {
+                    cell.textContent = "ERROR";
+                    cell.style.color = "red"
+                }
             }
+
             if ((cell.textContent.match(/\n/g) || []).length >= 2) {
                 cell.style.backgroundColor = "red";
             }
