@@ -284,6 +284,12 @@ function createAnalysisTable(la_string) {
     let lines = document.getElementById('input_area').value.split('\n');
     lines.forEach((line, index) => {
         let rule = line.split(' ');
+
+        if (la_sets.get((index + 1)).length === 0) {
+            let tmp = document.getElementsByClassName(`${rule[0]}${SEPERATOR}${EPSILON}`)[0];
+            tmp.textContent = `${EPSILON}, ${index + 1}`;
+            tmp.classList.add("text-bold");
+        }
         for (const symbol of la_sets.get(index + 1)) {
             if (!symbol.trim()) break;
             let tmp = document.getElementsByClassName(`${rule[0]}${SEPERATOR}${symbol}`)[0];
