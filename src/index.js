@@ -323,7 +323,7 @@ function parseLAStringToMap(inputString) {
     const lines = inputString.split('\n');
     const resultMap = new Map();
 
-    const regex = /LA\((\d+)\) = ([^*$]*)/;
+    const regex = /LA\((\d+)\) = (.*)/;
 
     lines.forEach(line => {
         const match = line.match(regex);
