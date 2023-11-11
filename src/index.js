@@ -75,11 +75,7 @@ document.getElementById('run_btn').addEventListener('click', () => {
     let output = document.getElementById('output_area');
     output.value = `${variables_string}\n${terminals_string}\n\n${replaceAll(fi_string,EPSILON,"")}\n${replaceAll(fo_string,EPSILON, "")}\n${replaceAll(la_string, EPSILON, "")}\n${ll1_string}`;
 
-    if (!ll1_string.includes('NOT'))
-        createAnalysisTable(la_string);
-    else {
-        document.getElementById('info').textContent = "Cannot create analysis table, grammar is not LL(1)!";
-    }
+    createAnalysisTable(la_string);
 
 })
 
@@ -300,7 +296,7 @@ function createAnalysisTable(la_string) {
                     varToEps.classList.add("text--bold");
                 }
             }
-            tmp.textContent += `, ${index + 1}`;
+            tmp.textContent += `, ${index + 1}\n`;
             tmp.classList.add("text--bold")
         }
 
