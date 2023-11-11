@@ -22,29 +22,29 @@ F -> id
 ```
 The output should look like this:
 ```
-Variables: { E, E', T, T', F }
-Terminals: { +, *, (, ), id }
+Variables: E E' T T' F 
+Terminals: + * ( ) id 
 
-FI(E) = { (, id }
-FI(E') = { + }
-FI(T) = { (, id }
-FI(T') = { * }
-FI(F) = { (, id }
+FI(E) = ( id
+FI(E') = + eps
+FI(T) = ( id
+FI(T') = * eps
+FI(F) = ( id
 
-FO(E) = { ) }
-FO(E') = { ) }
-FO(T) = { +, ) }
-FO(T') = { +, ) }
-FO(F) = { *, +, ) }
+FO(E) = )
+FO(E') = )
+FO(T) = + )
+FO(T') = + )
+FO(F) = * + )
 
-LA(1) = { (, id }
-LA(2) = { + }
-LA(3) = { ) }
-LA(4) = { (, id }
-LA(5) = { * }
-LA(6) = { +, ) }
-LA(7) = { ( }
-LA(8) = { id }
+LA(1) = ( id
+LA(2) = +
+LA(3) = )
+LA(4) = ( id
+LA(5) = *
+LA(6) = + )
+LA(7) = (
+LA(8) = id
 
 Grammar is LL(1)!
 ```
