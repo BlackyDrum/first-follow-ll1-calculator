@@ -287,7 +287,7 @@ function createAnalysisTable(la_string) {
 
         if (la_sets.get((index + 1)).length === 0) {
             let tmp = document.getElementsByClassName(`${rule[0]}${SEPERATOR}${EPSILON}`)[0];
-            tmp.textContent += `${EPSILON}, ${index + 1}`;
+            tmp.textContent = `${EPSILON}, ${index + 1}`;
             tmp.classList.add("text-bold");
         }
         for (const symbol of la_sets.get(index + 1)) {
