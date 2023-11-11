@@ -26,9 +26,9 @@ Variables: E E' T T' F
 Terminals: + * ( ) id 
 
 FI(E) = ( id
-FI(E') = + eps
+FI(E') = +
 FI(T) = ( id
-FI(T') = * eps
+FI(T') = *
 FI(F) = ( id
 
 FO(E) = )
