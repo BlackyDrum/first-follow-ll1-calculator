@@ -51,7 +51,7 @@ Grammar is LL(1)!
 
 The tool will calculate ``FI(V)`` to represent the first set of variable ``V`` and ``FO(V)`` to represent the follow set. Additionally, it will calculate ``LA(n)``, the lookeahead set for a given rule ``n`` and check if the grammar is LL(1).<br>
 
-If the grammar is LL(1), an analysis table will be created, that looks like this for our grammar:
+Also, an analysis table will be created, that looks like this for our grammar:
 <table id="analysis-table"><tr><td></td><td class="text--bold">+</td><td class="text--bold">*</td><td class="text--bold">(</td><td class="text--bold">)</td><td class="text--bold">id</td><td class="text--bold">eps</td></tr><tr><td class="text--bold">E</td><td class="E+#+**_::_**+#++"></td><td class="E+#+**_::_**+#+*"></td><td class="E+#+**_::_**+#+( text--bold">T E' , 1
 </td><td class="E+#+**_::_**+#+)"></td><td class="E+#+**_::_**+#+id text--bold">T E' , 1
 </td><td class="E+#+**_::_**+#+eps"></td></tr><tr><td class="text--bold">E'</td><td class="E'+#+**_::_**+#++ text--bold">+ T E' , 2
