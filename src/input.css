@@ -1,11 +1,16 @@
 .flex-container--margin {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
 .flex-container--evenly {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
+}
+
+.textarea--shadow {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .description--bold {
@@ -17,16 +22,17 @@
     font-weight: bold;
 }
 
-.footer {
+.header {
     position: relative;
     bottom: 0;
     width: 100%;
     text-align: center;
     margin-top: 20px;
+    color: #0e9ccf;
 }
 
 @media (max-width: 960px) {
-    .footer {
+    .header {
         position: relative;
         padding: 10px 0;
     }
@@ -45,8 +51,13 @@ button {
 
 
 table {
-    width: 50rem;
+    width: 43rem;
     border-collapse: collapse;
+    border-radius: 10px;
+    overflow: auto;
+}
+thead {
+    background-color: #0e9ccf;
 }
 
 td, th {
@@ -65,6 +76,20 @@ td, th {
 
 tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+
+th {
+    background-color: #f2f2f2;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+
+td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background-color: white;
 }
 
 /* The switch - the box around the slider */
