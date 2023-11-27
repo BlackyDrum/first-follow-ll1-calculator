@@ -1,6 +1,6 @@
 # Calculator for First and Follow sets + LL(1) analyzer
 
-<p>This is a simple web-based tool that helps you calculate the First and Follow sets of a context-free grammar and check whether the grammar is LL(1).</p>
+<p>This is a simple web-based tool that helps you calculate the First and Follow sets of a context-free grammar and check whether the grammar is LL(1) or not.</p>
 
 ## Demo
 https://blackydrum.github.io/first-follow-ll1-calculator/
