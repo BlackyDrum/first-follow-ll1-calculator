@@ -6,7 +6,8 @@
 https://blackydrum.github.io/first-follow-ll1-calculator/
 
 ## Usage
-Input your grammar in the provided field. Please note that ``eps`` is a reserved keyword representing epsilon. Each rule should be on a separate line, following the format: ``V -> β``, where ``V`` is a variable and ``β`` is a sequence of variables and terminals including epsilon.
+Input your grammar in the provided field. Please note that ``eps`` is a reserved keyword representing epsilon. Each rule should be on a separate line, following the format: ``V -> β``, where ``V`` is a variable and ``β`` is a sequence of variables and terminals including epsilon. <br>
+**If you have a left-recursive production rule, the tool will NOT work.**
 
 ## Example
 To demonstrate the functionality of this tool, we'll use the following example grammar:
