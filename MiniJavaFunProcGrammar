@@ -1,0 +1,57 @@
+<program> -> <constDecl> <varDecl> <procedure> <function> <statement>
+<function> -> func ident ( <routineParameter> ) { <routineBlock> return <expression> ; } <function>
+<function> -> eps
+<procedure> -> void ident ( <routineParameter> ) { <routineBlock> ; } <procedure>
+<procedure> -> eps
+<routineParameter> -> int ident <routineParameterList>
+<routineParameter> -> eps
+<routineParameterList> -> , int ident <routineParameterList>
+<routineParameterList> -> eps
+<routineBlock> -> <constDecl> <varDecl> <statement>
+<routineBlock> -> eps
+<constDecl> -> final int <constZuw> <constList> ;
+<constDecl> -> eps
+<constZuw> -> ident = number
+<constList> -> , <constZuw> <constList>
+<constList> -> eps
+<varDecl> -> int ident <varZuw> <varList> ;
+<varDecl> -> eps
+<varZuw> -> = number
+<varZuw> -> eps
+<varList> -> , ident <varZuw> <varList>
+<varList> -> eps
+<expression> -> <term> <summe>
+<summe> -> + <term> <summe>
+<summe> -> - <term> <summe>
+<summe> -> eps
+<term> -> <faktor> <product>
+<product> -> * <faktor> <product>
+<product> -> / <faktor> <product>
+<product> -> eps
+<faktor> -> number
+<faktor> -> ident <functionCall>
+<faktor> -> ( <expression> )
+<functionCall> -> ( <functionCall>'
+<functionCall> -> eps
+<functionCall>' -> )
+<functionCall>' -> <expression> <functionCallList> )
+<functionCallList> -> , <expression> <functionCallList>
+<functionCallList> -> eps
+<procCall> -> ( <procCall>'
+<procCall> -> eps
+<procCall>' -> )
+<procCall>' -> <expression> <procCallList> )
+<procCallList> -> , <expression> <procCallList>
+<procCallList> -> eps
+<condition> -> <expression> compOP <expression>
+<statement> -> ident <statement>'
+<statement> -> print ( <expression> ) ;
+<statement> -> { <stmtList> }
+<statement> -> if <condition> <statement> <optElse>
+<statement> -> while <condition> <statement>
+<statement>' -> = <expression> ;
+<statement>' -> <procCall> ;
+<optElse> -> else <statement>
+<optElse> -> eps
+<stmtList> -> <statement> <stmtList>
+<stmtList> -> eps
