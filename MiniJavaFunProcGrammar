@@ -1,4 +1,5 @@
-<program> -> <constDecl> <varDecl> <procedure> <function> <statement>
+<program> -> <constDecl> <varDecl> <procedure> <function> <mainDecl> <statement>
+<mainDecl> -> static void main ( )
 <function> -> func ident ( <routineParameter> ) { <routineBlock> return <expression> ; } <function>
 <function> -> eps
 <procedure> -> void ident ( <routineParameter> ) { <routineBlock> ; } <procedure>
