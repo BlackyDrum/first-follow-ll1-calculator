@@ -13,12 +13,15 @@ createApp({
         let terminals = [];
         let lookaheads = [];
         let follow_trace = [];
+        let first_trace = [];
 
         let oldInput = null;
 
         const input = ref(null);
         const output = ref(null);
         const showOutput = ref(false);
+
+        const isLeftRecursive = ref(false);
 
         const grammarChanged = ref(false);
 
@@ -68,26 +71,47 @@ createApp({
             // Calculate first sets
             let fi_string = "";
             variables.forEach(variable => {
-                fi_string += `FI(${variable}) = ${removeDuplicateWords(calculateFirstSets(variable)).trim()}\n`;
-                follow_trace = [];
+                try {
+                    fi_string += `FI(${variable}) = ${removeDuplicateWords(calculateFirstSets(variable)).trim()}\n`;
+                    follow_trace = [];
+                    first_trace = [];
+                } catch (e) {
+                    isLeftRecursive.value = true;
+                }
             })
 
             // Calculate follow sets
             let fo_string = "";
             variables.forEach(variable => {
-                fo_string += `FO(${variable}) = ${removeLastOccurrence(calculateFollowSets(variable)).trim()}\n`;
-                follow_trace = [];
+                try {
+                    fo_string += `FO(${variable}) = ${removeLastOccurrence(calculateFollowSets(variable)).trim()}\n`;
+                    follow_trace = [];
+                    first_trace = [];
+                } catch (e) {
+                    isLeftRecursive.value = true;
+                }
             })
 
             // Calculate lookahead sets
             let la_string = "";
             lines.forEach((line, index) => {
-                let la = removeDuplicateWords(calculateLookaheadSets(index)).trim();
-                la_string += `LA(${index + 1}) = ${la}\n`;
-                let variable = line.split(' ')[0];
-                lookaheads.push({variable: variable, terminals: la.split(' ')})
-                follow_trace = [];
+                try {
+                    let la = removeDuplicateWords(calculateLookaheadSets(index)).trim();
+                    la_string += `LA(${index + 1}) = ${la}\n`;
+                    let variable = line.split(' ')[0];
+                    lookaheads.push({variable: variable, terminals: la.split(' ')})
+                    follow_trace = [];
+                    first_trace = [];
+                } catch (e) {
+                    isLeftRecursive.value = true;
+                }
             })
+
+            if (isLeftRecursive.value) {
+                output.value = "Grammar is not LL(1), because it has one or more left-recursive production rules";
+                showOutput.value = true;
+                return;
+            }
 
             // Check if grammar is LL(1)
             let ll1_string = analyzeLL1();
@@ -193,9 +217,13 @@ createApp({
                             }
                             break;
                         }
-                            // If we reach a variable, calculate the first set of that variable and
+                        else if (i === 2 && first_trace[first_trace.length - 1] === rule[i]) {
+                            throw "LeftRecursiveProductionRuleException";
+                        }
+                        // If we reach a variable, calculate the first set of that variable and
                         // include that in the first set for the current variable
                         else if (variables.includes(rule[i])) {
+                            first_trace.push(rule[0]);
                             firsts += calculateFirstSets(rule[i]);
                             if (firsts !== "") terminate = true;
                         }
@@ -406,6 +434,8 @@ createApp({
             grammarChanged.value = false;
             oldInput = null;
 
+            isLeftRecursive.value = false;
+
             document.getElementById('analysis-table').textContent = '';
         }
 
@@ -435,7 +465,8 @@ F -> id`;
             input,
             output,
             showOutput,
-            grammarChanged
+            grammarChanged,
+            isLeftRecursive
         }
     }
 

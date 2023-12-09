@@ -28,6 +28,9 @@
     <div>
         <div>
             <div>
+                <div class="info" style="color: red" v-if="isLeftRecursive">
+                    The provided Grammar is Left Recursive
+                </div>
                 <v-textarea class="textarea--shadow" hide-details id="input_area" label="Input" variant="outlined" v-model="input" rows="14" cols="80"></v-textarea>
             </div>
             <div class="flex-container--margin">
