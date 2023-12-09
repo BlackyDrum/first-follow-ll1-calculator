@@ -50,6 +50,9 @@
 
 <div class="flex-container--evenly" v-if="showOutput">
     <div>
+        <div class="info" v-if="grammarChanged">
+            The Grammar has been changed.
+        </div>
         <v-textarea class="textarea--shadow" hide-details id="output_area" label="Output" variant="outlined" readonly v-model="output" rows="14" cols="80"></v-textarea>
     </div>
 </div>
@@ -59,6 +62,9 @@
 <div style="width: 100%">
     <div style="display: flex">
         <div style="margin-left: auto; margin-right: auto; overflow-x: auto; border-radius: 0.5rem; ">
+            <div class="info" v-if="grammarChanged">
+                The Grammar has been changed.
+            </div>
             <table class="textarea--shadow" id="analysis-table">
             </table>
         </div>

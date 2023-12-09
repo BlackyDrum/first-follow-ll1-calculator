@@ -1,4 +1,4 @@
-const {createApp, ref, onMounted} = Vue
+const {createApp, ref, onMounted, watch} = Vue
 const {createVuetify} = Vuetify
 
 const vuetify = createVuetify()
@@ -14,17 +14,27 @@ createApp({
         let lookaheads = [];
         let follow_trace = [];
 
+        let oldInput = null;
+
         const input = ref(null);
         const output = ref(null);
         const showOutput = ref(false);
+
+        const grammarChanged = ref(false);
 
 
         onMounted(() => {
             example()
         })
 
+        watch(input, () => {
+            grammarChanged.value = !!(oldInput && oldInput !== input.value);
+        })
+
         function init() {
             reset()
+
+            oldInput = input.value;
 
             let lines = input.value.split('\n');
             lines.forEach(line => {
@@ -393,6 +403,9 @@ createApp({
             terminals = [];
             lookaheads = [];
 
+            grammarChanged.value = false;
+            oldInput = null;
+
             document.getElementById('analysis-table').textContent = '';
         }
 
@@ -421,7 +434,8 @@ F -> id`;
 
             input,
             output,
-            showOutput
+            showOutput,
+            grammarChanged
         }
     }
 

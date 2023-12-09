@@ -98,3 +98,9 @@ td:first-child {
 button, input {
     cursor: pointer;
 }
+
+.info {
+    font-style: italic;
+    font-size: small;
+    margin-bottom: 10px;
+}
