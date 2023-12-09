@@ -76,7 +76,7 @@ createApp({
                     follow_trace = [];
                     first_trace = [];
                 } catch (e) {
-                    isLeftRecursive.value = true;
+                    isLeftRecursive.value = e instanceof RangeError;
                 }
             })
 
@@ -88,7 +88,7 @@ createApp({
                     follow_trace = [];
                     first_trace = [];
                 } catch (e) {
-                    isLeftRecursive.value = true;
+                    isLeftRecursive.value = e instanceof RangeError;
                 }
             })
 
@@ -103,7 +103,7 @@ createApp({
                     follow_trace = [];
                     first_trace = [];
                 } catch (e) {
-                    isLeftRecursive.value = true;
+                    isLeftRecursive.value = e instanceof RangeError;
                 }
             })
 
@@ -218,7 +218,7 @@ createApp({
                             break;
                         }
                         else if (i === 2 && first_trace[first_trace.length - 1] === rule[i]) {
-                            throw "LeftRecursiveProductionRuleException";
+                            throw new RangeError("LeftRecursiveProductionRuleException");
                         }
                         // If we reach a variable, calculate the first set of that variable and
                         // include that in the first set for the current variable
