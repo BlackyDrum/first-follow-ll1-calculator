@@ -1,3 +1,7 @@
+header ~ * {
+    padding: 10px;
+}
+
 .flex-container--margin {
     display: flex;
     margin-bottom: 20px;
